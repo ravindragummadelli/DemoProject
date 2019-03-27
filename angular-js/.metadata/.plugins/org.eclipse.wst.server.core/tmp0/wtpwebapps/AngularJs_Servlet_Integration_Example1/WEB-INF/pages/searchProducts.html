@@ -1,0 +1,92 @@
+<html ng-app="products.controller" >
+<head>
+<script type="text/javascript" src="js/angular.js"></script>
+<script>
+ var app=angular.module("products.controller",[]);
+app.controller("products_controller",
+		['$scope','$window','$http',
+		 function($scope,$window,$http){
+		$scope.display=true;	
+			
+	 $scope.productDetails=function(){
+$window.alert("calling : minPrice="+$scope.minPrice+" maxPrice="+$scope.maxPrice);
+ 
+ /* $http is used to communicate from client to server
+ $http is acting as a model in angular controller
+  */
+ $http({
+  url:"/AngularJs_Servlet_Integration_Example1/searchProducts",
+ method:"get", 
+ params:{
+	 "minPrice":$scope.minPrice,
+	 "maxPrice":$scope.maxPrice
+ }	 
+ }).then(function(result){
+	 
+	 $scope.display=false;
+	 $scope.responseList=result.data;
+     	
+ },function(result){
+	$scope.message="Unable to process your request!please try again."; 
+ });	 
+	 }
+}]);
+ 
+ </script>
+</head>
+<body ng-controller="products_controller">
+<h2>AngularJS to servlet integration Example</h2>
+<div >
+MinPrice :<input type="text" ng-model="minPrice"/>
+MaxPrice :<input type="text" ng-model="maxPrice"/>
+<button ng-click="productDetails()">search</button>
+</div><br/>
+<div align="center" style="color: red">
+{{message}}
+</div>
+<div align="center">
+<table border="1" ng-hide="display">
+<tr>
+<th>productId</th><th>productName</th>
+<th>price</th>
+</tr>
+<tr ng-repeat="product in responseList">
+<td>{{product.productId}}</td>
+<td>{{product.productName}}</td>
+<td>{{product.price}}</td>
+
+</tr>
+</table>
+</div>
+</body>
+</html>
+
+
+
+
+<!-- 
+ app.controller("products_controller1",
+		 ['$scope','$window','$http',
+		  function($scope,$window,$http){
+      $scope.productsList=function(){
+       $window.alert("minPrice="+$scope.minPrice+"maxPrice="+$scope.maxPrice);  
+      /* ajax call
+       */
+       $http({
+    	 url:"/AngularJS_Servlet_Integration_Example1/searchProducts",
+    	 type:"get",
+    	 params:{
+    	"minPrice":$scope.minPrice,
+    	"maxPrice":$scope.maxPrice	
+    	 }.then(function(result)){
+    		 
+    	 },function(){
+    		 
+    	 }
+    	 
+       
+       
+       });
+      }	 
+	 
+ }]); -->

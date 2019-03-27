@@ -1,0 +1,25 @@
+//in the place of productServlet if we want
+we can also use Spring Mvc as follows
+/**
+in web.xml file must be configure
+DispatcherServlet
+*/
+-------------------------------------
+@Controller
+public class ProductController{
+@Autowired
+private ProductService productService;
+
+@RequestMapping(value="searchProducts",
+method=RequestMethod.GET)
+@ResponseBody
+public String searchProducts(
+@RequestParam("minPrice") Double minPrice,
+@RequestParam("maxPrice") Double maxPrice){
+  
+  String jsonProductList=productService.searchProducts(minPrice,
+  maxPrice);
+
+return jsonProductList;
+}
+}
